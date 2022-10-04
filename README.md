@@ -1,8 +1,8 @@
-# Proyecto Inteligencia Articial
-## A* Search
+# Proyecto Inteligencia Articial (A* Search)
 Diseñar un algoritmo por escrito para el método de A*. <br>
 Diseñar en software el método de A*. <br>
-<b>Fecha de entrega: 6 de Octubre del 2022</b><br>
+
+![Imagen mapa Romania](/img/romania_map.png)
 
 <ul>
 	<li>Se debe programar en Python.</li>
@@ -14,8 +14,7 @@ Diseñar en software el método de A*. <br>
 	<li>Hacer como ejemplos de Arad a Bucharest y de Mehadia a Bucharest.</li>
 </ul>
 
-# A* Brochure
-Link to brochure [A* Brochure](https://www.canva.com/design/DAFOFiuFeaA/_X3HMKwf7AZqBzpzHI51JQ/edit?utm_content=DAFOFiuFeaA&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton).
+# Documentos del Proyecto
+El documento de presentación del proyecto puede ser encontrado en el folder[/docs](https://github.com/BttrMrcry/a-start-search/tree/main/docs).
 
-# A* User Manual
-Manual can be displayed by clicking on [/docs](https://github.com/BttrMrcry/a-start-search/tree/main/docs) folder. 
+<b>Fecha de entrega: Jueves 8 de octubre del 2022.</b>
