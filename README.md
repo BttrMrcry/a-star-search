@@ -1,5 +1,5 @@
 # Proyecto Inteligencia Articial
-## A-Star_Search
+## A* Search
 Diseñar un algoritmo por escrito para el método de A*. <br>
 Diseñar en software el método de A*. <br>
 <b>Fecha de entrega: 6 de Octubre del 2022</b><br>
@@ -11,6 +11,7 @@ Diseñar en software el método de A*. <br>
 	<li>Debe entregar la(s) trayectoria(s) óptima(s) y su costo total.</li>
 	<li>Es opcional que indique en un mapa las o las trayectorias óptimas.</li> 
 	<li>Es opcional hacer el método gráfico, que se mueva el mapa paso por paso.</li>
+	<li>Hacer como ejemplos de Arad a Bucharest y de Mehadia a Bucharest.</li>
 </ul>
 
 # A* Brochure
