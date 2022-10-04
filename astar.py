@@ -1,5 +1,6 @@
 import heapq
 from os import system, name
+from colorama import Fore, Back, Style
 
 # A* Python Traversal
 #https://medium.com/nerd-for-tech/graph-traversal-in-python-a-algorithm-27c30d67e0d0
@@ -123,7 +124,7 @@ def astar(mapa, ciudad_inicio, ciudad_fin):
     paso = 0
     while cola_prioridad:
         _, ciudad_actual = heapq.heappop(cola_prioridad)
-        print(f'Paso {paso}: La ciudad a expandir es {ciudad_actual}')
+        print(f'Paso {paso}: La ciudad a expandir es {Back.BLUE}{ciudad_actual}{Style.RESET_ALL}')
 
         if ciudad_actual == ciudad_fin:
             print('La ciudad a expandir es la final, se llegó al destino!')
@@ -140,9 +141,9 @@ def astar(mapa, ciudad_inicio, ciudad_fin):
                 distancia_f[siguiente_ciudad] = distancia_g_temporal + distancia_h
                 ciudad_anterior[siguiente_ciudad] = ciudad_actual
                 heapq.heappush(cola_prioridad, (distancia_f[siguiente_ciudad], siguiente_ciudad))
-                print(f'La función f(n) de {siguiente_ciudad} es f(n) = {distancia_g_temporal} + {distancia_h} = {distancia_f[siguiente_ciudad]}. Se agrega a la cola de prioridad.')
+                print(f'La función f(n) de {Back.YELLOW}{siguiente_ciudad}{Style.RESET_ALL} es f(n) = {distancia_g_temporal} + {distancia_h} = {distancia_f[siguiente_ciudad]}. Se agrega a la cola de prioridad.')
             else:
-                print(f'La distancia a {siguiente_ciudad} pasando por {ciudad_actual}: ({distancia_g_temporal}) es mayor\na la distancia mínima actual para llegar a {siguiente_ciudad}:({distancia_g[siguiente_ciudad]})')
+                print(f'La distancia a {Back.GREEN}{siguiente_ciudad}{Style.RESET_ALL}  pasando por {Back.BLUE}{ciudad_actual}{Style.RESET_ALL}: ({distancia_g_temporal}) es mayor\na la distancia mínima actual para llegar a {siguiente_ciudad} :({distancia_g[siguiente_ciudad]})')
         print("\n")
         paso += 1
     return distancia_g, ciudad_anterior
