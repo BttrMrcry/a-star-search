@@ -18,4 +18,4 @@ Diseñar en software el método de A*. <br>
 Link to brochure [A* Brochure](https://www.canva.com/design/DAFOFiuFeaA/_X3HMKwf7AZqBzpzHI51JQ/edit?utm_content=DAFOFiuFeaA&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton).
 
 # A* User Manual
-Manual can be displayed by clicking on [/PDF](https://github.com/BttrMrcry/a-start-search/tree/main/PDF) folder. 
+Manual can be displayed by clicking on [/docs](https://github.com/BttrMrcry/a-start-search/tree/main/docs) folder. 
