@@ -1,5 +1,5 @@
-# a-start-search
-# Proyecto 1
+# Proyecto Inteligencia Articial
+## A-Star_Search
 Diseñar un algoritmo por escrito para el método de A*. <br>
 Diseñar en software el método de A*. <br>
 <b>Fecha de entrega: 6 de Octubre del 2022</b><br>
@@ -16,3 +16,5 @@ Diseñar en software el método de A*. <br>
 # A* Brochure
 Link to brochure [A* Brochure](https://www.canva.com/design/DAFOFiuFeaA/_X3HMKwf7AZqBzpzHI51JQ/edit?utm_content=DAFOFiuFeaA&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton).
 
+# A* User Manual
+Manual can be displayed by clicking on [/PDF] folder. 
