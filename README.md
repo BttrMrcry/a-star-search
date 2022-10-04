@@ -14,7 +14,8 @@ Diseñar en software el método de A*. <br>
 	<li>Hacer como ejemplos de Arad a Bucharest y de Mehadia a Bucharest.</li>
 </ul>
 
-# Documentos del Proyecto
-El documento de presentación del proyecto puede ser encontrado en el folder[/docs](https://github.com/BttrMrcry/a-start-search/tree/main/docs).
+# Documentos del Proyecto (Reporte y Tríptico).
+Los documentos de presentación del proyecto puede ser encontrados en el folder [/docs](https://github.com/BttrMrcry/a-start-search/tree/main/docs).
 
-<b>Fecha de entrega: Jueves 8 de octubre del 2022.</b>
+# Entrega
+<b>Jueves 8 de octubre del 2022.</b>
