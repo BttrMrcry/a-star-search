@@ -1,157 +1,173 @@
+import heapq
+
+# A* Python Traversal
+#https://medium.com/nerd-for-tech/graph-traversal-in-python-a-algorithm-27c30d67e0d0
+graph = {
+  # now we need a list as the value to store g-score and h-score
+  # list first value is the g-score, second value is the h-score,i.e., heuristic
+   "Arad": {
+    "Sibiu": [140, 253],
+    "Timisoara": [118, 329],
+    "Zerind": [75, 374]
+  },
+  "Bucharest": {
+    "Fagaras": [211, 178],
+    "Giurgiu": [90, 77],
+    "Pitesti": [101, 98],
+    "Urziceni": [85, 80]
+  },
+  "Craiova": {
+    "Dobreta": [120, 242],
+    "Pitesti": [138, 98],
+    "Rimnicu": [146, 193]
+  },
+  "Dobreta": {
+    "Craiova": [120, 160],
+    "Mehadia": [75, 241]
+  },
+  "Efoire": {
+    "Hirsova": [86, 151]
+  },
+  "Fagaras": {
+    "Bucharest": [211, 0],
+    "Sibiu": [99, 253]
+  },
+  "Giurgiu": {
+    "Bucharest": [90, 0]
+  },
+  "Hirsova": {
+    "Efoire": [86, 161],
+    "Urziceni": [98, 80]
+  },
+  "Iasi": {
+    "Neamt": [87, 234],
+    "Vaslui": [92, 199]
+  },
+  "Lugoj": {
+    "Mehadia": [70, 241],
+    "Timisoara": [111, 329]
+  },
+  "Mehadia": {
+    "Dobreta": [75, 242],
+    "Lugoj": [70, 244]
+  },
+  "Neamt": {
+    "Iasi": [87, 226]
+  },
+  "Oradea": {
+    "Sibiu": [151, 253],
+    "Zerind": [71, 374]
+  },
+  "Pitesti": {
+    "Bucharest": [101, 0],
+    "Craiova": [138, 160],
+    "Rimnicu": [97, 193]
+  },
+  "Rimnicu": {
+    "Craiova": [146, 160],
+    "Pitesti": [97, 98],
+    "Sibiu": [80, 253]
+  },
+  "Sibiu": {
+    "Arad": [140, 366],
+    "Fagaras": [99, 178],
+    "Oradea": [151, 380],
+    "Rimnicu": [80, 193]
+  },
+  "Timisoara": {
+    "Arad": [118, 366],
+    "Lugoj": [111, 244]
+  },
+  "Urziceni": {
+    "Bucharest": [85, 0],
+    "Hirsova": [98, 151],
+    "Vaslui": [142,199]
+  },
+  "Vaslui": {
+    "Iasi": [92, 226],
+    "Urziceni": [142, 80]
+  },
+  "Zerind": {
+    "Arad": [75, 366],
+    "Oradea": [71, 380]
+  }
+}
 """
-INTELIGENCIA ARTIFICIAL
-METODO DE BUSQUEDA UNIFORME
+
+El algoritmo regresa el grafo de la siguiente manera.
+
+graph["Arad"] # this return {'B':[2,2],'C':[3,2]}.
+graph["Arad"]["Sibiu"][0]  # regresa el tamaño de la arista.
+graph["Arad"]["Sibiu"][1]  # regresa la distancia del nodo inicial al nodo destino.
+graph["Arad"]["Sibiu"] # esto regresa la tupla [<distancia_entre_nodos>, <distancia_heuristica>].
+
 """
-# Importando bibliotecas
-import pandas as pd
- # VARIABLES GLOBALES (Accesibles para cualquier funcion)
-info_ciudades = None          # Utilizado en DataFrame para vertices entre ciudades: ciudad1 - ciudad2 - costo
-lista_prioridad_frontera = [] # Lista FIFO cuyo costo de ruta más bajo sera el Head
+
+
+
+def astar(graph, start_node, end_node):
+  # A*: F=G+H, llamamos F como f_distance, G como g_distance, H como heurística
+  f_distance = {node: float('inf') for node in graph}  # f_distance = {"Arad": ∞, "Bucharest": ...}
+  f_distance[start_node] = 0
+
+  # Distancia hasta el momento.
+  g_distance = {node: float('inf') for node in graph}  # g_distance = {"Arad": ∞, "Bucharest": ...}
+  g_distance[start_node] = 0
+
+  came_from = {node: None for node in graph}  # came_from = {"Arad":None,"Bucharest":...} 
+  came_from[start_node] = start_node
+
+  queue = [(0, start_node)]  # El primer elemento es la distancia F y el segundo es el nodo n actual
+
+  while queue:
+    current_f_distance, current_node = heapq.heappop(queue)
+    if current_node == end_node:
+      print('found the end_node')
+      return g_distance, came_from
+
+    for next_node, weights in graph[current_node].items():  # Para cada nodo adyacente al nodo actual:
+      temp_g_distance = g_distance[current_node] + weights[0]  # A la distancia hasta el nodo actual, se le suma la distancia hasta el nodo siguiente
+      if temp_g_distance < g_distance[next_node]:
+        g_distance[next_node] = temp_g_distance
+        heuristic = weights[1]
+        f_distance[next_node] = temp_g_distance + heuristic
+        came_from[next_node] = current_node
+        heapq.heappush(queue, (f_distance[next_node], next_node))
+  return g_distance, came_from
+
+
+if __name__ == "__main__":
+  inicio = "Arad" 
+  fin = "Bucharest"
+  g_distance, came_from = astar(graph, inicio, fin)
+  # Recuperar camino
+  actual = fin
+  trayectoria_reversa = []
+  # actual: Craiova , inicio: Arad
+  while actual != inicio:
+    trayectoria_reversa.append(actual)
+    actual = came_from[actual]
+
+  copia_trayectoria_reversa = trayectoria_reversa.copy()
   
-# AGREGANDO LAS CIUDADES DE ROMANIA
-def agregar_ciudades():
-    global info_ciudades
-    data = [{'ciudad1': 'Timisoara',      'ciudad2': 'Lugoj',          'costo_ruta': 111},
-            {'ciudad1': 'Lugoj',          'ciudad2': 'Mehadia',        'costo_ruta': 70},
-            {'ciudad1': 'Mehadia',        'ciudad2': 'Dobreta',        'costo_ruta': 75},
-            {'ciudad1': 'Dobreta',        'ciudad2': 'Craiova',        'costo_ruta': 120},
-            {'ciudad1': 'Oradea',         'ciudad2': 'Zerind',         'costo_ruta': 71},
-            {'ciudad1': 'Oradea',         'ciudad2': 'Sibiu',          'costo_ruta': 151},
-            {'ciudad1': 'Zerind',         'ciudad2': 'Arad',           'costo_ruta': 75},
-            {'ciudad1': 'Arad',           'ciudad2': 'Sibiu',          'costo_ruta': 140},
-            {'ciudad1': 'Arad',           'ciudad2': 'Timisoara',      'costo_ruta': 118},   
-            {'ciudad1': 'Sibiu',          'ciudad2': 'Fagaras',        'costo_ruta': 99},
-            {'ciudad1': 'Sibiu',          'ciudad2': 'Rimnicu Vilcea', 'costo_ruta': 80},
-            {'ciudad1': 'Rimnicu Vilcea', 'ciudad2': 'Craiova',        'costo_ruta': 146},
-            {'ciudad1': 'Rimnicu Vilcea', 'ciudad2': 'Pitesti',        'costo_ruta': 97},
-            {'ciudad1': 'Craiova',        'ciudad2': 'Pitesti',        'costo_ruta': 138},
-            {'ciudad1': 'Fagaras',        'ciudad2': 'Bucharest',      'costo_ruta': 211},
-            {'ciudad1': 'Pitesti',        'ciudad2': 'Bucharest',      'costo_ruta': 101},
-            {'ciudad1': 'Neamt',          'ciudad2': 'Iasi',           'costo_ruta': 87},
-            {'ciudad1': 'Iasi',           'ciudad2': 'Vaslui',         'costo_ruta': 92},
-            {'ciudad1': 'Bucharest',      'ciudad2': 'Giurgiu',        'costo_ruta': 90},
-            {'ciudad1': 'Bucharest',      'ciudad2': 'Urziceni',       'costo_ruta': 85},
-            {'ciudad1': 'Urziceni',       'ciudad2': 'Vaslui',         'costo_ruta': 142},
-            {'ciudad1': 'Urziceni',       'ciudad2': 'Hirsova',        'costo_ruta': 98},
-            {'ciudad1': 'Hirsova',        'ciudad2': 'Eforie',         'costo_ruta': 86}]
-    info_ciudades = pd.DataFrame(data, columns=['ciudad1', 'ciudad2', 'costo_ruta'])
-# print(info_ciudades)      # despliega el dataFrame info_ciudades
+  while len(trayectoria_reversa) > 1:
+    ciudad = trayectoria_reversa.pop() 
+    print(f"{ciudad}({g_distance[ciudad]})->", end = '')
+  ultima_ciuidad = trayectoria_reversa.pop()
+  print(f"{ultima_ciuidad}({g_distance[ultima_ciuidad]})")
 
-# CLASE NODO Y SUS ATRIBUTOS
-class Nodo:
-    def __init__(self,ciudad,vecino,costo_ruta):
-        self.ciudad = ciudad
-        self.vecino = vecino
-        self.costo_ruta = costo_ruta
-
-# FUNCION MAIN, EJECUTA EL PROGRAMA
-def main():
-    global info_ciudades # Variable global a modificar
-    agregar_ciudades()   # Agregamos los caminos de las ciudades
-    menu()               # Desplegamos el menu()
-    ciudad_origen = input('Ingrese Ciudad de Inicio: \n')
-    ciudad_destino = input('Ingrese Ciudad Destino:\n')
-    hacer_recorrido(ciudad_origen,ciudad_destino)
-
-def menu():
-    print('*--------------------------------------------*')
-    print('|  METODO UNIFORME, INTELIGENCIA ARTIFICIAL  |')
-    print('*--------------------------------------------*')
-    print('|  MAPA DE CIUDADES DISPONIBLES PARA VIAJE   |')
-    print('|                                            |')
-    print('| -Arad            -Bucharest     -Craiova   |')
-    print('| -Dobreta         -Eforie        -Fagaras   |')
-    print('| -Giurgiu         -Hirsova       -Iasi      |')
-    print('| -Lugoj           -Mehadia       -Neamt     |')
-    print('| -Oradea          -Pitesti       -Sibiu     |')
-    print('| -Rimnicu Vilcea  -Timisoara     -Urziceni  |')
-    print('| -Vaslui          -Zerind                   |')
-    print('*--------------------------------------------*')
-
-
-def hacer_recorrido(ciudad_origen, ciudad_destino):
-    camino, costo_total = busqueda_uniforme(ciudad_origen, ciudad_destino)
-    if not camino:  # Si no se pudo llegar al destino
-        print('ERROR: No se pudo recorrer de ciudad {} a la ciudad {}.\nVerifique sus entradas o las ciudades incluidas en el mapa\n' +
-        ' y vuelva a ejecutar el programa.'.format(ciudad_origen, ciudad_destino))     
-    else:
-        print('RECORRIDO DE {} A {} COMPLETADO, RUTA:'.format(ciudad_origen,ciudad_destino).upper())
-        ciudades_visitadas = []
-        while True:
-            ciudades_visitadas.append(camino.ciudad) # Agregando a la lista las ciudades visitadas
-            if camino.vecino is None: # Cuando camino.vecino no tenga mas valores
-                break
-            camino = camino.vecino
-        size = len(ciudades_visitadas)  # Obtenemos la longitud antes de iterar
-        for i in range(size):  # IMPRIMIENDO LA TRAYECTORIA DE CIUDADES
-            if i < size - 1:
-                print(ciudades_visitadas.pop(), end='' + ", ")
-            else:
-                print(ciudades_visitadas.pop()) 
-        print('COSTO DE RUTA: {} [KM]'.format(costo_total))   
-
- # Funcion que comprueba si la ciudad del nodo esta en la lista de prioridad_frontera
-def nodo_en_frontera(frontera, nodo): 
-    for i in frontera:
-        if nodo.ciudad == i.ciudad:
-            return True
-    return False    # Si no lo encuentra, retorna falso
- 
-# Funcion para la busqueda uniforme
-def busqueda_uniforme(c_origen, c_destino):
-    #print(type(c_origen))
-    global info_ciudades, lista_prioridad_frontera   # Variables que afectan a las globales
-    nodo = Nodo(c_origen, None,0)                    # Creamos un nodo con la ciudad de origen
-    agregar_frontera(nodo)                           # Lo agregamos a la frontera
-    explorado = []                                   # Para guardar las ciudades ya exploradas
     
-    while True:
-        if len(lista_prioridad_frontera) == 0:  # Si ya no quedan elementos en la lista de prioridades
-            return False                        # Cortamos el flujo del programa
-        nodo = lista_prioridad_frontera.pop(0)  # Quitamos el primer elemento
-        explorado.append(nodo.ciudad)
-                 # Prueba de objetivo
-        if nodo.ciudad == c_destino:            # Si ya completamos el recorrido
-            return nodo, nodo.costo_ruta        # Terminamos, recojan sus cosas chicos
-                                                # Sino, recorremos los nodos secundarios
-        for i in range(len(info_ciudades)):     # Total de Ciudades
-            ciudad_destino = ''                 #Inicializamos variable ciudad_destino
-            if info_ciudades['ciudad1'][i] == nodo.ciudad:    # Si la ciudad de mapa corresponde a la de nodo
-                ciudad_destino = info_ciudades['ciudad2'][i]  # Actualizamos ciudad_destino con el nuevo recorrido
-            elif info_ciudades['ciudad2'][i] == nodo.ciudad:  # Comparando el nodo de la ciudad con el valor ciudad2 del DaFr
-                ciudad_destino = info_ciudades['ciudad1'][i]  # Actualizamos ciudad_destino con el valor anterior
-            if ciudad_destino == '':                          # Si no hubo un match en el DaFr, continuamos
-                continue
-            nodo_hijo = Nodo(ciudad_destino, nodo, nodo.costo_ruta + info_ciudades['costo_ruta'][i])
-            
-            # El siguiente conjunto de lineas nos ayuda a definir los nodos frontera del nodo actual
-            # Si el nodo no ha sido explorado y no esta mapeado en frontera, se mapea
-            # Si esta en la frontera, se actualiza con el nodo de menor consumo de ruta
-            if nodo_hijo.ciudad not in explorado and not nodo_en_frontera(lista_prioridad_frontera, nodo_hijo):
-                agregar_frontera(nodo_hijo)         # Agregamos al nodo frontera 
-            elif nodo_en_frontera(lista_prioridad_frontera, nodo_hijo):
-                reemplaza_frontera(nodo_hijo)        # Corrige para una frontera con menor costo
- 
-# Funcion que expande y actualiza las fronteras en base al costo de ruta
-def agregar_frontera(nodo):
-    global lista_prioridad_frontera
-    size = len(lista_prioridad_frontera)
-    for i in range(size):
-        if nodo.costo_ruta < lista_prioridad_frontera[i].costo_ruta: # Si el costo del nodo nuevo es menor al de lista de priodad, se inserta
-            lista_prioridad_frontera.insert(i, nodo)
-            return
-    lista_prioridad_frontera.append(nodo) # Caso contrario, el costo es mayor y lo agregamos al FINAL de la cola
- 
-# Funcion que reemplaza las fronteras en base al costo de ruta
-def reemplaza_frontera(nodo):
-    global lista_prioridad_frontera
-    size = len(lista_prioridad_frontera)
-    for i in range(size): # Por cada elemento de la lista_prioridad_frontera
-        # Si la ciudad de frontera es la misma que el nodo y el costo de frontera es mayor al del nodo
-        if lista_prioridad_frontera[i].ciudad == nodo.ciudad and lista_prioridad_frontera[i].costo_ruta > nodo.costo_ruta:
-            lista_prioridad_frontera[i] = nodo # Se actualiza la frontera con el nodo para tener el costo mas bajo
-            return
- 
-#Inicia el programa
-main()
 
+  # trayectoria_reversa = [Bucharest, Pitesti, ]
+  
+  #print(g_distance)
+  #print(came_from)]
+  
+  
+# return {'A': 0, 'B': 4, 'C': 5, 'D': 10, 'E': 4, 'F': 4} and {'A': 'A', 'B': 'A', 'C': 'A', 'D': 'B', 'E': 'B', 'F': 'E'}
+"""
+found the end_node
+{'Arad': 0, 'Bucharest': 418, 'Craiova': 526, 'Dobreta': inf, 'Efoire': inf, 'Fagaras': 417, 'Giurgiu': inf, 'Hirsova': inf, 'Iasi': inf, 'Lugoj': inf, 'Mehadia': inf, 'Neamt': inf, 'Oradea': 671, 'Pitesti': 415, 'Rimnicu': 413, 'Sibiu': 393, 'Timisoara': 447, 'Urziceni': inf, 'Vaslui': inf, 'Zerind': 449}
+{'Arad': 'Arad', 'Bucharest': 'Pitesti', 'Craiova': 'Rimnicu', 'Dobreta': None, 'Efoire': None, 'Fagaras': 'Sibiu', 'Giurgiu': None, 'Hirsova': None, 'Iasi': None, 'Lugoj': None, 'Mehadia': None, 'Neamt': None, 'Oradea': 'Sibiu', 'Pitesti': 'Rimnicu', 'Rimnicu': 'Sibiu', 'Sibiu': 'Arad', 'Timisoara': 'Arad', 'Urziceni': None, 'Vaslui': None, 'Zerind': 'Arad'}
+
+"""
