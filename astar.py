@@ -197,6 +197,7 @@ if __name__ == "__main__":
     while ciuidad_actual != ciudad_inicio:
         trayectoria_reversa.append(ciuidad_actual)
         ciuidad_actual = ciudad_anterior[ciuidad_actual]
+    trayectoria_reversa.append(ciuidad_actual)
 
     print(f'Costo: {distancia_g[ciudad_fin]}')
     print('Trayectoria:', end=' ')
