@@ -1,6 +1,8 @@
 import heapq
+import networkx as nx
+import matplotlib.pyplot as plt
 from os import system, name
-from colorama import Fore, Back, Style
+from colorama import Back, Style
 
 # A* Python Traversal
 #https://medium.com/nerd-for-tech/graph-traversal-in-python-a-algorithm-27c30d67e0d0
@@ -104,6 +106,37 @@ graph["Arad"]["Sibiu"][1]  # regresa la distancia del nodo inicial al nodo desti
 graph["Arad"]["Sibiu"] # esto regresa la tupla [<distancia_entre_nodos>, <distancia_heuristica>].
 
 """
+def crear_grafo_networkx(mapa, aristas_ruta):
+    G = nx.Graph()
+    aristas_camino = []
+    aristas_mapa = []
+    for ciudad_origen, destinos in mapa.items():
+        for ciudad_destino, pesos in destinos.items():
+            if (ciudad_origen, ciudad_destino) in aristas_ruta:
+                G.add_edge(ciudad_origen[0:3], ciudad_destino[0:3], weight = pesos[0])
+                aristas_camino.append((ciudad_origen[0:3], ciudad_destino[0:3]))
+            else:    
+                G.add_edge(ciudad_origen[0:3], ciudad_destino[0:3], weight = pesos[0])
+                aristas_mapa.append((ciudad_origen[0:3], ciudad_destino[0:3]))
+    #pos = ["Arad":()]
+    edges = G.edges()
+    pos = nx.spring_layout(G, seed=7)  
+    print(aristas_camino)
+    print(aristas_mapa)
+    #print(pos)
+    nx.draw_networkx_nodes(G, pos, node_size=700)
+    nx.draw_networkx_edges(G, pos, edgelist = aristas_camino, edge_color = 'r')
+    nx.draw_networkx_edges(G, pos, edgelist = aristas_mapa, edge_color = 'b')
+    nx.draw_networkx_labels(G, pos, font_size=10, font_family="sans-serif")
+    edge_labels = nx.get_edge_attributes(G, "weight")
+    nx.draw_networkx_edge_labels(G, pos, edge_labels)
+    ax = plt.gca()
+    ax.margins(0.08)
+    plt.axis("off")
+    plt.tight_layout()
+    plt.show()
+    return G
+
 
 
 
@@ -199,6 +232,17 @@ if __name__ == "__main__":
         ciuidad_actual = ciudad_anterior[ciuidad_actual]
     trayectoria_reversa.append(ciuidad_actual)
 
+    aristas_ruta = set()
+    ciudad_anterior = None
+    for ciudad in trayectoria_reversa:
+        if not ciudad_anterior:
+            ciudad_anterior = ciudad
+            continue
+        else:
+            aristas_ruta.add((ciudad, ciudad_anterior))
+            aristas_ruta.add((ciudad_anterior, ciudad))
+            ciudad_anterior = ciudad
+
     print(f'Costo: {distancia_g[ciudad_fin]}')
     print('Trayectoria:', end=' ')
     while len(trayectoria_reversa) > 1:
@@ -206,3 +250,6 @@ if __name__ == "__main__":
         print(f"{ciudad}({distancia_g[ciudad]}) -> ", end = '')
     ultima_ciuidad = trayectoria_reversa.pop()
     print(f"{ultima_ciuidad}({distancia_g[ultima_ciuidad]})")
+
+    crear_grafo_networkx(mapa, aristas_ruta)
+
