@@ -106,7 +106,7 @@ graph["Arad"]["Sibiu"][1]  # regresa la distancia del nodo inicial al nodo desti
 graph["Arad"]["Sibiu"] # esto regresa la tupla [<distancia_entre_nodos>, <distancia_heuristica>].
 
 """
-def crear_grafo_networkx(mapa, aristas_ruta):
+def crear_grafo_networkx(mapa, aristas_ruta, origen_str, destino_str):
     G = nx.Graph()
     aristas_camino = []
     aristas_mapa = []
@@ -118,21 +118,29 @@ def crear_grafo_networkx(mapa, aristas_ruta):
             else:    
                 G.add_edge(ciudad_origen[0:3], ciudad_destino[0:3], weight = pesos[0])
                 aristas_mapa.append((ciudad_origen[0:3], ciudad_destino[0:3]))
-    #pos = ["Arad":()]
-    edges = G.edges()
     pos = nx.spring_layout(G, seed=7)  
-    #print(pos)
     nx.draw_networkx_nodes(G, pos, node_size=700)
-    nx.draw_networkx_edges(G, pos, edgelist = aristas_camino, edge_color = 'r')
-    nx.draw_networkx_edges(G, pos, edgelist = aristas_mapa, edge_color = 'b')
+    nx.draw_networkx_edges(G, pos, edgelist = aristas_camino, edge_color = 'r',width=6)
+    nx.draw_networkx_edges(G, pos, edgelist = aristas_mapa, edge_color = 'b', width=3)
     nx.draw_networkx_labels(G, pos, font_size=10, font_family="sans-serif")
     edge_labels = nx.get_edge_attributes(G, "weight")
     nx.draw_networkx_edge_labels(G, pos, edge_labels)
     ax = plt.gca()
-    ax.margins(0.08)
+    plt.title(
+        f"Ruta A* desde {str(origen_str)} hasta {destino_str}",
+            {
+                'fontsize': 20,
+                'fontstyle': 'italic',
+                'family': 'sans-serif',
+                'fontweight' : 40,
+                'verticalalignment': 'baseline',
+                'horizontalalignment': 'center'
+            }
+    )
     plt.axis("off")
-    plt.tight_layout()
-    plt.show()
+    mng = plt.get_current_fig_manager()
+    mng.full_screen_toggle()
+    plt.show()  
     return G
 
 
@@ -249,5 +257,5 @@ if __name__ == "__main__":
     ultima_ciuidad = trayectoria_reversa.pop()
     print(f"{ultima_ciuidad}({distancia_g[ultima_ciuidad]})")
 
-    crear_grafo_networkx(mapa, aristas_ruta)
+    crear_grafo_networkx(mapa, aristas_ruta, ciudad_inicio, ciudad_fin)
 
