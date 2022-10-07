@@ -211,8 +211,8 @@ def menu():
 
 
 if __name__ == "__main__":
+    clear()
     while True:
-        clear()
         menu()
         ciudad_inicio = input('Ingresa el nombre de la ciudad de inicio: ') 
         if ciudad_inicio in mapa:
