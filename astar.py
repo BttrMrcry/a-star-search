@@ -29,7 +29,7 @@ mapa = {
         "Craiova": [120, 160],
         "Mehadia": [75, 241]
     },
-    "Efoire": {
+    "Eforie": {
         "Hirsova": [86, 151]
     },
     "Fagaras": {
@@ -40,7 +40,7 @@ mapa = {
         "Bucharest": [90, 0]
     },
     "Hirsova": {
-        "Efoire": [86, 161],
+        "Eforie": [86, 161],
         "Urziceni": [98, 80]
     },
     "Iasi": {
