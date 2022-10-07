@@ -119,7 +119,7 @@ def crear_grafo_networkx(mapa, aristas_ruta, origen_str, destino_str):
                 G.add_edge(ciudad_origen[0:3], ciudad_destino[0:3], weight = pesos[0])
                 aristas_mapa.append((ciudad_origen[0:3], ciudad_destino[0:3]))
     pos = nx.spring_layout(G, seed=7)  
-    nx.draw_networkx_nodes(G, pos, node_size=700)
+    nx.draw_networkx_nodes(G, pos, node_size=700,node_color='lightblue')
     nx.draw_networkx_edges(G, pos, edgelist = aristas_camino, edge_color = 'r',width=6)
     nx.draw_networkx_edges(G, pos, edgelist = aristas_mapa, edge_color = 'b', width=3)
     nx.draw_networkx_labels(G, pos, font_size=10, font_family="sans-serif")
@@ -190,11 +190,9 @@ def astar(mapa, ciudad_inicio, ciudad_fin):
 
 # define una función clear
 def clear():
- 
     # for windows
     if name == 'nt':
         _ = system('cls')
- 
     # for mac and linux(here, os.name is 'posix')
     else:
         _ = system('clear')
@@ -229,10 +227,10 @@ if __name__ == "__main__":
 
     ciudad_fin = "Bucharest"
     distancia_g, ciudad_anterior = astar(mapa, ciudad_inicio, ciudad_fin)
+    
     # Recuperar camino
     ciuidad_actual = ciudad_fin
     trayectoria_reversa = []
-  # actual: Craiova , inicio: Arad
     while ciuidad_actual != ciudad_inicio:
         trayectoria_reversa.append(ciuidad_actual)
         ciuidad_actual = ciudad_anterior[ciuidad_actual]
@@ -251,6 +249,7 @@ if __name__ == "__main__":
 
     print(f'Costo: {distancia_g[ciudad_fin]}')
     print('Trayectoria:', end=' ')
+    
     while len(trayectoria_reversa) > 1:
         ciudad = trayectoria_reversa.pop() 
         print(f"{ciudad}({distancia_g[ciudad]}) -> ", end = '')
