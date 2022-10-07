@@ -121,8 +121,6 @@ def crear_grafo_networkx(mapa, aristas_ruta):
     #pos = ["Arad":()]
     edges = G.edges()
     pos = nx.spring_layout(G, seed=7)  
-    print(aristas_camino)
-    print(aristas_mapa)
     #print(pos)
     nx.draw_networkx_nodes(G, pos, node_size=700)
     nx.draw_networkx_edges(G, pos, edgelist = aristas_camino, edge_color = 'r')
